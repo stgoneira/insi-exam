@@ -3,6 +3,10 @@
 Todos los recursos ejecutables permiten configurar el **puerto de ejecución** pasando el puerto como argumento al momento de iniciar la aplicación.
 Por ejemplo:
 
+```
+.\SistemaXYZ.exe <puerto>
+```
+
 
 ## XML Pagos
 
