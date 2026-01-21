@@ -1,85 +1,106 @@
 # Examen INSI
 
-A todos los recursos ejecutables se les puede cambiar el puerto de ejecución pasando un argumento a la ejecución, por ejemplo:
+Todos los recursos ejecutables permiten configurar el **puerto de ejecución** pasando el puerto como argumento al momento de iniciar la aplicación.
+Por ejemplo:
 
-```
-SistemaX.exe <puerto>
-```
 
 ## XML Pagos
 
-Se entregan 3 archivos XML para poder utilizar en el desarrollo de la solución.
+Para el desarrollo de la solución se entregan **tres archivos XML**, los cuales contienen la información necesaria para simular y procesar los pagos realizados por los clientes en sucursales.
 
 
-## Web Pagos
+## Web Pagos (REST)
 
-Puerto por defecto 5000. Cuenta con la siguiente API Rest:
+Aplicación web que expone una **API REST** para la consulta de pagos.
 
-* GET /api/payments
-* GET /api/payments/today
+- **Puerto por defecto:** 5000
+- **Endpoints disponibles:**
+  - `GET /api/payments` — Obtiene el listado completo de pagos registrados.
+  - `GET /api/payments/today` — Obtiene los pagos realizados durante el día actual.
+
+Para ejecutar el sistema:
+
+```
+.\WebPagos.exe <puerto>
+```
 
 
 ## Sistema Contable (SOAP)
 
-WSDL: http://localhost:5001/?wsdl
+Sistema contable expuesto mediante **servicios SOAP**.
 
-Puerto por defecto 5001. Sistema solo para Windows. Para ejecutar debe:
+- **Puerto por defecto:** 5001
+- **WSDL:** `http://localhost:5001/?wsdl`
+- **Plataforma:** Solo Windows
+
+Para ejecutar el sistema:
 
 ```
 .\SistemaContable.exe <puerto>
 ```
 
-Cuenta con un método:
 
-* RegistrarPago(clienteId, monto)
+### Métodos disponibles
 
-El cual devuelve el estado de cuenta: clienteId y el saldo.
+- `RegistrarPago(clienteId, monto)`
 
-Donde un saldo mayor que cero quiere decir que el cliente aún tiene deuda, por el contrario, si el saldo es cero o menor, quiere decir que el cliente está al día o ha pagado por adelantado.
+Este método registra un pago y retorna el **estado de cuenta** del cliente, incluyendo:
+- `clienteId`
+- `saldo`
+
+**Interpretación del saldo:**
+- Saldo **mayor a 0**: el cliente mantiene deuda.
+- Saldo **igual o menor a 0**: el cliente se encuentra al día o ha pagado por adelantado.
 
 
 
-## Sistema Agendamiento (SOAP)
+## Sistema de Agendamiento (SOAP)
 
-WSDL en: http://localhost:5002/AgendaService?wsdl
+Sistema SOAP encargado de la **gestión de clases del gimnasio**.
 
-Sistema SOAP para agendar clases en el gimnasio. Por defecto, ejecuta en el puerto 5002. Debe tener instalado dotNET 8 para su ejecución, idealmente correrlo en Linux usando el siguiente comando:
+- **Puerto por defecto:** 5002
+- **WSDL:** `http://localhost:5002/AgendaService?wsdl`
+- **Requisito:** .NET 8
+
+Se recomienda su ejecución en Linux mediante el siguiente comando:
 
 ```
 dotnet SistemaAgendamientoClases.dll <puerto>
 ```
 
-Tiene disponible 2 métodos:
 
-* HabilitarUsuario(clienteId)
-* DeshabilitarUsuario(clienteId)
+### Métodos disponibles
+
+- `HabilitarUsuario(clienteId)` — Habilita al cliente para agendar clases.
+- `DeshabilitarUsuario(clienteId)` — Deshabilita al cliente para agendar clases.
 
 
+## Sistema de Control de Acceso (REST)
 
-## Sistema Control de Acceso
+Sistema encargado de la **gestión de usuarios y control de acceso**, expuesto mediante una **API REST**.
 
-Puede ejecutarse en Linux usando:
+Para ejecutar en Linux:
 
 ```
 dotnet SistemaControlAcceso.dll
 ```
 
-El Sistema de Control de Accesos tiene una API REST:
+### Endpoints disponibles
 
-* GET /api/users - recuperar usuarios
-* POST /api/users - crear un usuario nuevo
-* GET /api/users/{rut} - recuperar un usuario en particular
-* PATCH /api/users/{rut} - actualizar información de un usuario
-* DELETE /api/users/{rut} - eliminar un usuario
+- `GET /api/users` — Recupera la lista de usuarios.
+- `POST /api/users` — Crea un nuevo usuario.
+- `GET /api/users/{rut}` — Recupera la información de un usuario específico.
+- `PATCH /api/users/{rut}` — Actualiza la información de un usuario.
+- `DELETE /api/users/{rut}` — Elimina un usuario.
 
-Espera JSON con la siguiente estructura:
+### Formato JSON esperado
 
 ```
 {
-  "rut": "string",
-  "nombre": "string",
-  "email": "string",
-  "telefono": "string",
-  "habilitado": boolean
+"rut": "string",
+"nombre": "string",
+"email": "string",
+"telefono": "string",
+"habilitado": boolean
 }
 ```
